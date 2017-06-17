@@ -7,12 +7,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<!-- Leaflet style. REQUIRED! -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css" />
     <script src="../leaflet.draw-src.js"></script>
     <script src="../leaflet.draw-parabolicbay.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+    <link rel="stylesheet" href="../leaflet.draw.css" />
+    <link rel="stylesheet" href="../leaflet.draw-parabolicbay.css" />
 	<style>
 		html { height: 100%; }
 		body { height: 100%; margin: 0; padding: 0;}
@@ -28,7 +29,7 @@
 	<script>
         var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            map = new L.Map('map', { center: new L.LatLng(51.505, -0.04), zoom: 13 }),
+            map = new L.Map('map', { center: new L.LatLng(23, 120), zoom: 7 }),
             drawnItems = L.featureGroup().addTo(map);
 
         L.control.layers({
@@ -53,6 +54,7 @@
                     allowIntersection: false,
                     showArea: false
                 },
+                polyline: false,
                 marker: false,
                 polygon: false,
                 rectangle: false,

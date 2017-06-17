@@ -28,7 +28,6 @@ L.Util.extend(L.drawLocal.draw.handlers, {
 	}
 });
 
-
 /* @class L.Draw.ParabolicBay
  * @aka Draw.ParabolicBay
  * @inherits L.Draw.Feature
@@ -80,7 +79,7 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		}
 
 		// Need to set this here to ensure the correct message is used.
-		this.options.drawError.message = L.drawLocal.draw.handlers.polyline.error;
+		this.options.drawError.message = L.drawLocal.draw.handlers.parabolicbay.error;
 
 		// Merge default drawError options with custom options
 		if (options && options.drawError) {
@@ -88,7 +87,7 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		}
 
 		// Save the type so super can fire, need to do this as cannot do this.TYPE :(
-		this.type = L.Draw.Polyline.TYPE;
+		this.type = L.Draw.ParabolicBay.TYPE;
 
 		L.Draw.Feature.prototype.initialize.call(this, map, options);
 	},
@@ -369,7 +368,7 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		var lastPtDistance
 		if (this._markers.length > 0) {
 				var finishMarker;
-				if (this.type === L.Draw.Polyline.TYPE) {
+				if (this.type === L.Draw.ParabolicBay.TYPE) {
 					finishMarker = this._markers[this._markers.length - 1];
 				} else if (this.type === L.Draw.Polygon.TYPE) {
 					finishMarker = this._markers[0];
@@ -500,19 +499,19 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		}
 		if (this._markers.length === 0) {
 			labelText = {
-				text: L.drawLocal.draw.handlers.polyline.tooltip.start
+				text: L.drawLocal.draw.handlers.parabolicbay.tooltip.start
 			};
 		} else {
 			distanceStr = showLength ? this._getMeasurementString() : '';
 
 			if (this._markers.length === 1) {
 				labelText = {
-					text: L.drawLocal.draw.handlers.polyline.tooltip.cont,
+					text: L.drawLocal.draw.handlers.parabolicbay.tooltip.cont,
 					subtext: distanceStr
 				};
 			} else {
 				labelText = {
-					text: L.drawLocal.draw.handlers.polyline.tooltip.end,
+					text: L.drawLocal.draw.handlers.parabolicbay.tooltip.end,
 					subtext: distanceStr
 				};
 			}
@@ -606,6 +605,52 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 	_fireCreatedEvent: function () {
 		var poly = new this.Poly(this._poly.getLatLngs(), this.options.shapeOptions);
 		L.Draw.Feature.prototype._fireCreatedEvent.call(this, poly);
+	}
+});
+
+L.DrawToolbar.include({
+	options: {
+		polyline: {},
+		polygon: {},
+		rectangle: {},
+		circle: {},
+		marker: {},
+		parabolicbay: {}
+	},
+
+	getModeHandlers: function (map) {
+		return [
+			{
+				enabled: this.options.polyline,
+				handler: new L.Draw.Polyline(map, this.options.polyline),
+				title: L.drawLocal.draw.toolbar.buttons.polyline
+			},
+			{
+				enabled: this.options.polygon,
+				handler: new L.Draw.Polygon(map, this.options.polygon),
+				title: L.drawLocal.draw.toolbar.buttons.polygon
+			},
+			{
+				enabled: this.options.rectangle,
+				handler: new L.Draw.Rectangle(map, this.options.rectangle),
+				title: L.drawLocal.draw.toolbar.buttons.rectangle
+			},
+			{
+				enabled: this.options.circle,
+				handler: new L.Draw.Circle(map, this.options.circle),
+				title: L.drawLocal.draw.toolbar.buttons.circle
+			},
+			{
+				enabled: this.options.marker,
+				handler: new L.Draw.Marker(map, this.options.marker),
+				title: L.drawLocal.draw.toolbar.buttons.marker
+			},
+			{
+				enabled: this.options.parabolicbay,
+				handler: new L.Draw.ParabolicBay(map, this.options.parabolicbay),
+				title: L.drawLocal.draw.toolbar.buttons.parabolicbay
+			}
+		];
 	}
 });
 

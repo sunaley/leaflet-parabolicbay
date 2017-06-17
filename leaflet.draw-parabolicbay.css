@@ -1,0 +1,7 @@
+.leaflet-draw-toolbar .leaflet-draw-draw-parabolicbay {
+    background-position: -2px -2px;
+}
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-parabolicbay {
+    background-position: 0 -1px;
+}
