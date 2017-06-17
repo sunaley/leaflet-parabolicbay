@@ -7,8 +7,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<!-- Leaflet style. REQUIRED! -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
 
 	<style>
 		html { height: 100%; }
@@ -22,29 +24,46 @@
     <div>
     </div>
 
-
-    <script src="../leaflet.latlng-graticule.js"></script>
-
 	<script>
-		//var _base_tile_url = 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-        var _base_tile_url = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            map = new L.Map('map',{zoomControl:false}).setView([24.0, 121], 6);
-        var baselayer = L.tileLayer(_base_tile_url, {
-            unloadInvisibleTiles: false
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            map = new L.Map('map', { center: new L.LatLng(51.505, -0.04), zoom: 13 }),
+            drawnItems = L.featureGroup().addTo(map);
+
+        L.control.layers({
+            'osm': L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib }),
+            'google': L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+                attribution: 'google'
+            }, ''),
+            'esri': L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'ESRI'
+            }, '')
+        }, { 'drawlayer': drawnItems }, { position: 'topleft', collapsed: false }).addTo(map);
+
+        map.addControl(new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems,
+                poly: {
+                    allowIntersection: false
+                }
+            },
+            draw: {
+                polyline: {
+                    allowIntersection: false,
+                    showArea: false
+                },
+                marker: false,
+                polygon: false,
+                rectangle: false,
+                circle: false
+            }
+        }));
+
+        map.on(L.Draw.Event.CREATED, function (event) {
+            var layer = event.layer;
+
+            drawnItems.addLayer(layer);
         });
-        map.addLayer(baselayer);
-
-        L.latlngGraticule({
-            showLabel: true,
-            zoomInterval: [
-                {start: 2, end: 3, interval: 30},
-                {start: 4, end: 4, interval: 10},
-                {start: 5, end: 7, interval: 5},
-                {start: 8, end: 10, interval: 1}
-            ]
-        }).addTo(map);
-
-        console.log(map.options.crs);
 
 	</script>
 
