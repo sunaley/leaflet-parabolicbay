@@ -222,6 +222,10 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		}
 
 		this._vertexChanged(latlng, true);
+
+		if (this._markers.length == 3) {
+			this.completeShape();
+		}
 	},
 
 	// @method completeShape(): void
