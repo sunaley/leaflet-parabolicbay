@@ -287,12 +287,6 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		// Update the mouse marker position
 		this._mouseMarker.setLatLng(latlng);
 
-		// console.log(newPos);
-		// console.log(latlng);
-
-		// console.log(newPos);
-		// console.log(rotatedPos);
-
 		if (this._markers.length == 2) {
 			var degree = Math.PI;
 			var lastMarkerPos = this._map.latLngToLayerPoint(
