@@ -224,6 +224,12 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		this._vertexChanged(latlng, true);
 
 		if (this._markers.length == 3) {
+			var _polyLatLng = this._poly.getLatLngs();
+			_polyLatLng.splice(0, 0, this._waveFrontLineLatLng);
+			this._markers.splice(0, 0, this._createMarker(
+				this._waveFrontLineLatLng
+			))
+			this._poly.setLatLngs(_polyLatLng);
 			this.completeShape();
 		}
 	},
@@ -287,6 +293,7 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		// Update the mouse marker position
 		this._mouseMarker.setLatLng(latlng);
 
+		// finish shape when 2 markers exists
 		if (this._markers.length == 2) {
 			var degree = Math.PI;
 			var lastMarkerPos = this._map.latLngToLayerPoint(
@@ -296,6 +303,7 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 				this._markers[0].getLatLng()
 			);
 
+			// get related position
 			var mouseToLastPos = {
 				x: newPos.x - lastMarkerPos.x,
 				y: newPos.y - lastMarkerPos.y
@@ -307,11 +315,14 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 			};
 
 			// draw the guide line
-			//this._clearGuides();
+			// to show two guide line, do not clear guide lines
+			// this._clearGuides();
 			this._drawGuide(
 				this._map.latLngToLayerPoint(this._markers[0].getLatLng()),
 				rotatedPos
 			);
+
+			this._waveFrontLineLatLng = this._map.layerPointToLatLng(rotatedPos);
 		}
 
 		L.DomEvent.preventDefault(e.originalEvent);
