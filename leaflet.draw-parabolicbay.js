@@ -287,6 +287,39 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 		// Update the mouse marker position
 		this._mouseMarker.setLatLng(latlng);
 
+		// console.log(newPos);
+		// console.log(latlng);
+
+		// console.log(newPos);
+		// console.log(rotatedPos);
+
+		if (this._markers.length == 2) {
+			var degree = Math.PI;
+			var lastMarkerPos = this._map.latLngToLayerPoint(
+				this._markers[this._markers.length-1].getLatLng()
+			);
+			var firstMarkerPos = this._map.latLngToLayerPoint(
+				this._markers[0].getLatLng()
+			);
+
+			var mouseToLastPos = {
+				x: newPos.x - lastMarkerPos.x,
+				y: newPos.y - lastMarkerPos.y
+			}
+
+			var rotatedPos = {
+				x: (mouseToLastPos.x * Math.cos(degree) + mouseToLastPos.y * Math.sin(degree)) + firstMarkerPos.x,
+				y: (-1 * mouseToLastPos.x * Math.sin(degree) + mouseToLastPos.y * Math.cos(degree)) + firstMarkerPos.y
+			};
+
+			// draw the guide line
+			//this._clearGuides();
+			this._drawGuide(
+				this._map.latLngToLayerPoint(this._markers[0].getLatLng()),
+				rotatedPos
+			);
+		}
+
 		L.DomEvent.preventDefault(e.originalEvent);
 	},
 
