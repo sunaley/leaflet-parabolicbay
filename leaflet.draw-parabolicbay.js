@@ -3,9 +3,9 @@
  * @aka Draw.ParabolicBayShapes
  * @inherits L.Draw.Polyline
  */
-L.Draw.ParabolicBayShapes = L.Draw.Polyline.extend({
+L.Draw.Polyline = L.Draw.Feature.extend({
 	statics: {
-		TYPE: 'parabolicbayshapes'
+		TYPE: 'polyline'
 	},
 
 	Poly: L.Polyline,
