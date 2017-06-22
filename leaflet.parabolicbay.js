@@ -50,6 +50,22 @@ L.ParabolicBayShape = L.Layer.extend({
 
         return result;
     },
+
+    calculateOutput: function (R0, theta) {
+        var beta = this.getBeta(),
+            Cx = this.getParams(beta),
+            C0 = Cx.C0,
+            C1 = Cx.C1,
+            C2 = Cx.C2,
+            R = 0;
+
+        R = R0 * (C0 + (C1 * (beta / theta)) + (C2 * (beta / theta) ** 2));
+        return R;
+    },
+
+    getBeta: function () {
+
+    }
 })
 
 L.parabolicbayshape = function(latlngs, options) {
