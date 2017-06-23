@@ -26,16 +26,34 @@ L.ParabolicBayShape = L.Layer.extend({
         weight: 0.5,
     },
 
-    parabolicbayParam: ParabolicbayParameter,
+    parabolicbayParam: ParabolicbayParameters,
 
-    initialize: function (latlngs, options) {
-        if (latlangs) {
-            this._latlngs = latlngs;
+    initialize: function (latLngs, options) {
+        if (latLngs) {
+            this._latLngs = latLngs;
         }
     },
 
-    onAdd: function (map) {
+    _convetToPoints: function (latLngs) {
+        var map = this._map,
+            result = [];
 
+        latLngs.forEach(function(element) {
+            result.push(map.latLngToLayerPoint(element));
+        });
+
+        return result;
+    },
+
+    // addTo: function (map) {
+    //     console.log('add');
+    //     this._map = map;
+
+    //     return this;
+    // },
+
+    onAdd: function (map) {
+        var beta = this.getBeta();
     },
 
     getParams: function (beta0) {
@@ -64,7 +82,20 @@ L.ParabolicBayShape = L.Layer.extend({
     },
 
     getBeta: function () {
+        var points, dx1, dy1, m1, dx2, dy2, m2, tanBeta, beta;
+        points = this._convetToPoints(this._latLngs);
 
+        dx1 = points[0].x - points[1].x;
+        dy1 = points[0].y - points[1].y;
+        m1 = dy1 / dx1;
+
+        dx2 = points[1].x - points[2].x;
+        dy2 = points[1].y - points[2].y;
+        m2 = dy2 / dx2;
+
+        tanBeta = m1 - m2 / (1 + m1 * m2);
+        beta = Math.abs(Math.atan(tanBeta)) * (180 / Math.PI);
+        return beta;
     }
 })
 

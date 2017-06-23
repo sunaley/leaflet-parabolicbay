@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
     <script src="../leaflet.draw-src.js"></script>
     <script src="../leaflet.draw-parabolicbay.js"></script>
+    <script src="../leaflet.parabolicbay.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
     <link rel="stylesheet" href="../leaflet.draw.css" />
@@ -66,9 +67,10 @@
             var layer = event.layer;
 
             drawnItems.addLayer(layer);
+            // var latLngs = L.extend([], layer.getLatLngs())
+            // var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
         });
 
-        var polyline = L.polyline([[23, 120], [23, 121]], {color: 'red'}).addTo(map);
 	</script>
 
 </body>
