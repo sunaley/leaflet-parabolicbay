@@ -67,8 +67,9 @@
             var layer = event.layer;
 
             drawnItems.addLayer(layer);
-            // var latLngs = L.extend([], layer.getLatLngs())
-            // var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
+            var latLngs = L.extend([], layer.getLatLngs())
+            var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
+            //var polyline = L.polyline([[23, 120], [23, 121]], {color: 'red'}).addTo(drawnItems);
         });
 
 	</script>
