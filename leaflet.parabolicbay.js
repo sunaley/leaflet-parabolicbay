@@ -31,7 +31,6 @@ L.ParabolicBayShape = L.Layer.extend({
     initialize: function (latLngs, options) {
         if (latLngs) {
             this._latLngs = latLngs;
-            this._points = this._convetToPoints(this._latLngs);
         }
     },
 
@@ -53,7 +52,6 @@ L.ParabolicBayShape = L.Layer.extend({
         points.forEach(function(element) {
             result.push(map.layerPointToLatLng(element));
         });
-
         return result;
     },
 
@@ -73,20 +71,23 @@ L.ParabolicBayShape = L.Layer.extend({
     },
 
     onAdd: function (map) {
+        this._points = this._convetToPoints(this._latLngs);
+
         var beta = this.getBeta(),
             R0 = this.getR0(),
             theta = 0;
 
+
         var pointRs = [];
         var points = this._points;
 
-        for (var i=1; i<18; i++) {
-            theta = i * 10;
+        for (var i=1; i<36; i++) {
+            theta = beta + i * 10;
             R = this.calculateOutput(R0, theta, beta);
 
             pointRs.push({
-                x: R * Math.cos(this.degToRad(theta)) * Math.cos(this.degToRad(beta)) + points[0].x,
-                y: R * Math.sin(this.degToRad(90 - (theta + beta))) + points[0].y
+                x: R * Math.cos(this.degToRad(theta - beta)) * Math.cos(this.degToRad(beta)) + points[0].x,
+                y: R * Math.sin(this.degToRad(90 - theta)) + points[0].y
             });
         }
 

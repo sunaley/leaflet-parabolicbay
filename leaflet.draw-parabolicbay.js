@@ -28,6 +28,9 @@ L.Util.extend(L.drawLocal.draw.handlers, {
 	}
 });
 
+L.Draw.Event = L.Draw.Event || {};
+L.Draw.Event.DRAWMOVE = 'draw:drawmove';
+
 /* @class L.Draw.ParabolicBay
  * @aka Draw.ParabolicBay
  * @inherits L.Draw.Feature
@@ -322,6 +325,10 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 				rotatedPos
 			);
 
+			var polyLatlngs = L.extend([], this._poly.getLatLngs());
+			polyLatlngs.push(latlng);
+			console.log(polyLatlngs);
+			this._map.fire(L.Draw.Event.DRAWMOVE, { layer: this, layerType: this.type, latlngs: polyLatlngs});
 			this._waveFrontLineLatLng = this._map.layerPointToLatLng(rotatedPos);
 		}
 

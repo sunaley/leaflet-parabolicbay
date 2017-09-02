@@ -67,8 +67,27 @@
             var layer = event.layer;
 
             drawnItems.addLayer(layer);
-            var latLngs = L.extend([], layer.getLatLngs())
+            var latLngs = L.extend([], layer.getLatLngs());
             var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
+            //var polyline = L.polyline([[23, 120], [23, 121]], {color: 'red'}).addTo(drawnItems);
+        });
+        
+        var test = 0;
+        var parabolicbay;
+        map.on(L.Draw.Event.DRAWMOVE, function (event) {
+            var layer = event.layer;
+            var latLngs = L.extend([], event.latlngs);
+            
+            console.log(layer);
+            // if (!map.hasLayer(layer)) { 
+            if (test == 0) { 
+                parabolicbay = L.parabolicbayshape(latLngs, {color: 'red'}).addTo(map);
+                test++;
+            }
+            parabolicbay.setLatLngs(latLngs);
+            // drawnItems.addLayer(layer);
+            // var latLngs = L.extend([], layer.getLatLngs())
+            // var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
             //var polyline = L.polyline([[23, 120], [23, 121]], {color: 'red'}).addTo(drawnItems);
         });
 
