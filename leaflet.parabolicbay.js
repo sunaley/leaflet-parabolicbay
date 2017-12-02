@@ -48,7 +48,7 @@ L.ParabolicBayShape = L.Layer.extend({
     _convertToLatlngs: function (points) {
         var map = this._map,
             result = [];
-
+        result.push(this._latLngs[0]);
         points.forEach(function(element) {
             result.push(map.layerPointToLatLng(element));
         });
@@ -81,16 +81,19 @@ L.ParabolicBayShape = L.Layer.extend({
         var pointRs = [];
         var points = this._points;
 
-        for (var i=1; i<36; i++) {
-            theta = beta + i * 10;
-            R = this.calculateOutput(R0, theta, beta);
+        var alpha = this.radToDeg(Math.atan(
+            (points[0].y - points[1].y) /
+            (points[0].x - points[1].x)
+        )) - beta;
 
+        for (var i=1; i<180; i++) {
+            theta = beta + i * 1;
+            R = this.calculateOutput(R0, theta, beta);
             pointRs.push({
-                x: R * Math.cos(this.degToRad(theta - beta)) * Math.cos(this.degToRad(beta)) + points[0].x,
-                y: R * Math.sin(this.degToRad(90 - theta)) + points[0].y
+                x: R * Math.cos(this.degToRad(180 - theta - alpha)) + points[0].x,
+                y: points[0].y - R * Math.sin(this.degToRad(180 - theta - alpha))
             });
         }
-
         var latLngs = this._convertToLatlngs(pointRs);
         var polyline = L.polyline(latLngs, {color: 'red'}).addTo(map);
     },
@@ -127,12 +130,11 @@ L.ParabolicBayShape = L.Layer.extend({
         dy1 = points[0].y - points[1].y;
         m1 = dy1 / dx1;
 
-        dx2 = points[1].x - points[2].x;
-        dy2 = points[1].y - points[2].y;
+        dx2 = points[2].x - points[1].x;
+        dy2 = points[2].y - points[1].y;
         m2 = dy2 / dx2;
 
-        tanBeta = m1 - m2 / (1 + m1 * m2);
-        beta = Math.abs(Math.atan(tanBeta)) * (180 / Math.PI);
+        beta = this.radToDeg(Math.atan(m1) - Math.atan(m2));
         return beta;
     },
 
@@ -144,7 +146,6 @@ L.ParabolicBayShape = L.Layer.extend({
         dy1 = points[0].y - points[1].y;
 
         dxy1 = Math.sqrt(dx1 ** 2 + dy1 ** 2);
-
         return dxy1;
     }
 })

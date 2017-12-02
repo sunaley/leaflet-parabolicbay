@@ -33,8 +33,10 @@
             map = new L.Map('map', { center: new L.LatLng(23, 120), zoom: 7 }),
             drawnItems = L.featureGroup().addTo(map);
 
+        map.attributionControl.setPrefix('');
+
         L.control.layers({
-            'osm': L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib }),
+            'osm': L.tileLayer(osmUrl, { maxZoom: 18 }),
             'google': L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
                 attribution: 'google'
             }, ''),
@@ -69,27 +71,20 @@
             drawnItems.addLayer(layer);
             var latLngs = L.extend([], layer.getLatLngs());
             var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
-            //var polyline = L.polyline([[23, 120], [23, 121]], {color: 'red'}).addTo(drawnItems);
         });
-        
-        var test = 0;
-        var parabolicbay;
-        map.on(L.Draw.Event.DRAWMOVE, function (event) {
-            var layer = event.layer;
-            var latLngs = L.extend([], event.latlngs);
-            
-            console.log(layer);
-            // if (!map.hasLayer(layer)) { 
-            if (test == 0) { 
-                parabolicbay = L.parabolicbayshape(latLngs, {color: 'red'}).addTo(map);
-                test++;
-            }
-            parabolicbay.setLatLngs(latLngs);
-            // drawnItems.addLayer(layer);
-            // var latLngs = L.extend([], layer.getLatLngs())
-            // var parabolicbay = L.parabolicbayshape(latLngs.slice(1), {color: 'red'}).addTo(map);
-            //var polyline = L.polyline([[23, 120], [23, 121]], {color: 'red'}).addTo(drawnItems);
+
+        map.on('mousemove ', function (e) {
+            var newPos = map.mouseEventToLayerPoint(e.originalEvent);
+            var latlng = map.layerPointToLatLng(newPos);
+
+            map.attributionControl.setPrefix(
+                latlng.lat.toFixed(5).toString() + '|' +
+                latlng.lng.toFixed(5).toString() + '<br>' +
+                newPos.x + '|' +
+                newPos.y
+            );
         });
+
 
 	</script>
 

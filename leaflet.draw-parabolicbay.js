@@ -232,7 +232,8 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 			this._markers.splice(0, 0, this._createMarker(
 				this._waveFrontLineLatLng
 			))
-			this._poly.setLatLngs(_polyLatLng);
+            this._poly.setLatLngs(_polyLatLng);
+
 			this.completeShape();
 		}
 	},
@@ -310,12 +311,12 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 			var mouseToLastPos = {
 				x: newPos.x - lastMarkerPos.x,
 				y: newPos.y - lastMarkerPos.y
-			}
+            }
 
 			var rotatedPos = {
 				x: (mouseToLastPos.x * Math.cos(degree) + mouseToLastPos.y * Math.sin(degree)) + firstMarkerPos.x,
 				y: (-1 * mouseToLastPos.x * Math.sin(degree) + mouseToLastPos.y * Math.cos(degree)) + firstMarkerPos.y
-			};
+            };
 
 			// draw the guide line
 			// to show two guide line, do not clear guide lines
@@ -327,9 +328,10 @@ L.Draw.ParabolicBay = L.Draw.Feature.extend({
 
 			var polyLatlngs = L.extend([], this._poly.getLatLngs());
 			polyLatlngs.push(latlng);
-			console.log(polyLatlngs);
-			this._map.fire(L.Draw.Event.DRAWMOVE, { layer: this, layerType: this.type, latlngs: polyLatlngs});
-			this._waveFrontLineLatLng = this._map.layerPointToLatLng(rotatedPos);
+
+            this._map.fire(L.Draw.Event.DRAWMOVE, { layer: this, layerType: this.type, latlngs: polyLatlngs});
+            this._waveFrontLineLatLng = this._map.layerPointToLatLng(rotatedPos);
+
 		}
 
 		L.DomEvent.preventDefault(e.originalEvent);
